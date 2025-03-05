@@ -16,7 +16,7 @@ const router = createRouter({
     },
     {
       path: '/categories',
-      name: 'Movie Categories',
+      name: 'MovieCategories',
       component: () => import('../views/Categories/CategoriesList.vue'),
       meta: {
         title: 'Movie Categories',
@@ -24,34 +24,50 @@ const router = createRouter({
     },
     {
       path: '/categories/add',
-      name: 'Add Categories',
-      component: () => import('../views/Categories/Add.vue'),
+      name: 'AddCategories',
+      component: () => import('../views/Categories/ManageItem.vue'),
       meta: {
-        title: 'Add Categories',
+        title: 'Add Category',
+      },
+    },
+    {
+      path: '/categories/edit/:id', // <-- Dynamic Route
+      name: 'EditCategory',
+      component: () => import('../views/Categories/ManageItem.vue'), // สร้างไฟล์นี้
+      meta: {
+        title: 'Edit Category',
       },
     },
     {
       path: '/reviews',
-      name: 'Movie Reviews',
+      name: 'MovieReviews',
       component: () => import('../views/Reviews/ReviewsList.vue'),
       meta: {
-        title: 'Movie Reviews',
+        title: 'Reviews',
       },
     },
     {
       path: '/movies',
-      name: 'Movie list',
+      name: 'Movielist',
       component: () => import('../views/Movies/MovieList.vue'),
       meta: {
-        title: 'Movie list',
+        title: 'Movies',
       },
     },
     {
       path: '/movies/add',
-      name: 'Add Movie',
-      component: () => import('../views/Movies/Add.vue'),
+      name: 'AddMovie',
+      component: () => import('../views/Movies/ManageItem.vue'),
       meta: {
         title: 'Add Movie',
+      },
+    },
+    {
+      path: '/movies/edit/:id', // <-- Dynamic Route
+      name: 'EditMovie',
+      component: () => import('../views/Movies/ManageItem.vue'), // สร้างไฟล์นี้
+      meta: {
+        title: 'Edit Movie',
       },
     },
     {

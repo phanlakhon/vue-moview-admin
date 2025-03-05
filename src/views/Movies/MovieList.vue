@@ -1,24 +1,35 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { getItems } from '@/firebase/database'
+
 import PageBreadcrumb from '@/components/common/PageBreadcrumb.vue'
 import AdminLayout from '@/components/layout/AdminLayout.vue'
-import BasicTableOne from '@/components/tables/basic-tables/BasicTableOne.vue'
+import MoviesList from '@/components/tables/movies-list/MoviesList.vue'
 import Button from '@/components/ui/Button.vue'
 
 const router = useRouter()
 const currentPageTitle = ref('Movies')
 
-import { db } from '@/firebase'
-import { collection, getDocs } from 'firebase/firestore'
-
 const items = ref([])
+const categories = ref({})
 
 onMounted(async () => {
-  const querySnapshot = await getDocs(collection(db, 'reviews'))
-  items.value = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
+  try {
+    const [categoriesRes, moviesRes] = await Promise.all([
+      getItems('categories'),
+      getItems('movies'),
+    ])
 
-  console.log('items', items.value)
+    items.value = moviesRes
+    categories.value = categoriesRes.reduce((accumulator, currentValue) => {
+      const { id, name } = currentValue
+      accumulator[id] = name
+      return accumulator
+    }, {})
+  } catch (error) {
+    console.error('Error fetching data:', error)
+  }
 })
 
 const goToAddMovie = () => {
@@ -33,6 +44,7 @@ const goToAddMovie = () => {
     <div class="flex mb-2">
       <Button size="xs" variant="primary" :onclick="goToAddMovie">Add Movie</Button>
     </div>
-    <BasicTableOne />
+
+    <MoviesList :items="items" :categories="categories" />
   </AdminLayout>
 </template>
